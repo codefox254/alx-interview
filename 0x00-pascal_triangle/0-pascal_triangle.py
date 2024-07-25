@@ -1,7 +1,4 @@
 #!/usr/bin/python3
-"""
-The pascal_triangle
-"""
 
 def pascal_triangle(n):
     """
