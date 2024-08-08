@@ -7,6 +7,7 @@ The only operations allowed are "Copy All" and "Paste".
 Author: Your Name
 """
 
+
 def minOperations(n):
     """
     Calculate the minimum number of operations to get exactly n H characters.
