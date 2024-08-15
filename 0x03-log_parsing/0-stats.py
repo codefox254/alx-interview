@@ -1,46 +1,54 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
+"""
+Log parsing module
+"""
+
 import sys
-import signal
+import re
 
-total_size = 0
-status_counts = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0, 404: 0, 405: 0, 500: 0}
-line_count = 0
 
-def print_statistics():
-    """Prints the current statistics."""
-    print(f"File size: {total_size}")
-    for status in sorted(status_counts.keys()):
-        if status_counts[status] > 0:
-            print(f"{status}: {status_counts[status]}")
+def output(log: dict) -> None:
+    """
+    Helper function to display stats:
+    - Total file size
+    - Frequency of each status code
+    """
+    print("File size: {}".format(log["file_size"]))
+    for code in sorted(log["code_frequency"]):
+        if log["code_frequency"][code]:
+            print("{}: {}".format(code, log["code_frequency"][code]))
 
-def signal_handler(sig, frame):
-    """Handles keyboard interruption (CTRL + C)."""
-    print_statistics()
-    sys.exit(0)
 
-signal.signal(signal.SIGINT, signal_handler)
+if __name__ == "__main__":
+    # Regex to match log lines with IP, date, request, status code, and file size
+    regex = re.compile(
+        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3} - \[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d+\] "GET /projects/260 HTTP/1.1" (.{3}) (\d+)'
+    )
 
-for line in sys.stdin:
-    parts = line.split()
-    if len(parts) < 7:
-        continue
+    line_count = 0
+    log = {
+        "file_size": 0,
+        "code_frequency": {str(code): 0 for code in [200, 301, 400, 401, 403, 404, 405, 500]}
+    }
+
     try:
-        ip_address = parts[0]
-        date = parts[3] + " " + parts[4]
-        method = parts[5][1:]
-        resource = parts[6]
-        protocol = parts[7][:-1]
-        status_code = int(parts[8])
-        file_size = int(parts[9])
-        
-        total_size += file_size
-        if status_code in status_counts:
-            status_counts[status_code] += 1
-        line_count += 1
-        
-        if line_count % 10 == 0:
-            print_statistics()
-    except (IndexError, ValueError):
-        continue
+        for line in sys.stdin:
+            line = line.strip()
+            match = regex.fullmatch(line)
+            if match:
+                line_count += 1
+                code = match.group(1)
+                file_size = int(match.group(2))
 
-print_statistics()
+                # Increment total file size
+                log["file_size"] += file_size
+
+                # Increment status code frequency
+                if code.isdecimal():
+                    log["code_frequency"][code] += 1
+
+                # Output log stats every 10 lines
+                if line_count % 10 == 0:
+                    output(log)
+    finally:
+        output(log)
