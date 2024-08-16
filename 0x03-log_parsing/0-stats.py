@@ -22,7 +22,8 @@ def output(log: dict) -> None:
 if __name__ == "__main__":
     # Regex to match log lines with IP, date, request, status code, and file size
     regex = re.compile(
-        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3} - \[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d+\] "GET /projects/260 HTTP/1.1" (.{3}) (\d+)'
+        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3} - \[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d+\] "GET /projects/260 HTTP/1.1" '
+        r'(.{3}) (\d+)'
     )
 
     line_count = 0
@@ -44,7 +45,7 @@ if __name__ == "__main__":
                 log["file_size"] += file_size
 
                 # Increment status code frequency
-                if code.isdecimal():
+                if code.isdecimal() and code in log["code_frequency"]:
                     log["code_frequency"][code] += 1
 
                 # Output log stats every 10 lines
