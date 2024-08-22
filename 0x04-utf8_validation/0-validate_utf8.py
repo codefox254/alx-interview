@@ -31,12 +31,3 @@ def validUTF8(data):
     
     # After processing all data, ensure there are no leftover expected continuation bytes.
     return n_bytes == 0
-
-
-# Example usage
-if __name__ == "__main__":
-    data = [197, 130, 1]
-    print(validUTF8(data))  # Expected output: True
-
-    data = [235, 140, 4]
-    print(validUTF8(data))  # Expected output: False
