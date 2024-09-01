@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import sys
 
+
 def print_solution(queens):
     """Prints the solution in the required format."""
     print([[i, queens[i]] for i in range(len(queens))])
