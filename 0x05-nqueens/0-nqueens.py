@@ -1,9 +1,11 @@
 #!/usr/bin/python3
 import sys
 
+
 def print_solution(queens):
     """Prints the solution in the required format."""
     print([[i, queens[i]] for i in range(len(queens))])
+
 
 def is_safe(queens, row, col):
     """Checks if a queen can be placed at (row, col)."""
@@ -13,6 +15,7 @@ def is_safe(queens, row, col):
         if c == col or abs(c - col) == abs(r - row):
             return False
     return True
+
 
 def solve_nqueens(N):
     """Solves the N queens problem using backtracking."""
@@ -27,6 +30,7 @@ def solve_nqueens(N):
 
     queens = [-1] * N
     backtrack(0)
+
 
 def main():
     # Check the number of command line arguments
@@ -48,6 +52,7 @@ def main():
 
     # Solve the N queens problem
     solve_nqueens(N)
+
 
 if __name__ == "__main__":
     main()
