@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+""" Create a DP array to store the fewest coins for each amount up to total"""
+
 
 def makeChange(coins, total):
     if total <= 0:
