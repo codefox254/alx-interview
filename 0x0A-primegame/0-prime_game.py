@@ -1,47 +1,59 @@
 #!/usr/bin/python3
 # Prime Game simulation between Maria and Ben
 
-def sieve_of_eratosthenes(n):
+def primes(n):
     """
-    Generate a sieve of primes up to n.
+    Return a list of prime numbers between 1 and n inclusive.
     
     Args:
-    n (int): Upper limit for prime numbers.
+        n (int): The upper boundary of the range, where the lower boundary is always 1.
     
     Returns:
-    list: A list where True indicates that the index is a prime number.
+        list: A list of prime numbers within the range from 1 to n.
     """
+    prime = []
     sieve = [True] * (n + 1)
-    sieve[0] = sieve[1] = False  # 0 and 1 are not prime numbers
-    for i in range(2, int(n ** 0.5) + 1):
-        if sieve[i]:
-            for j in range(i * i, n + 1, i):
-                sieve[j] = False
-    return sieve
+    
+    for p in range(2, n + 1):
+        if sieve[p]:
+            prime.append(p)
+            for i in range(p, n + 1, p):
+                sieve[i] = False
+    
+    return prime
 
 
 def isWinner(x, nums):
     """
-    Determine the winner of x rounds of the prime game.
-
+    Determines the winner of the Prime Game.
+    
     Args:
-    x (int): The number of rounds.
-    nums (list of int): Array where each element represents the upper limit n for that round.
-
+        x (int): The number of rounds of the game.
+        nums (list of int): Upper limits for each round of the game.
+    
     Returns:
-    str: The name of the player with the most wins (Maria or Ben), or None if there's a tie.
+        str: The name of the winner ("Maria" or "Ben"). If no winner is determined, returns None.
     """
-    if not nums or x < 1:
+    if x is None or nums is None or x == 0 or nums == []:
         return None
     
-    # Find the maximum value of n in nums to generate primes up to that value
-    max_n = max(nums)
+    Maria = Ben = 0
     
-    # Generate prime numbers up to the largest n using the sieve of Eratosthenes
-    prime_sieve = sieve_of_eratosthenes(max_n)
+    # Iterate over the rounds and determine who wins each round
+    for i in range(x):
+        prime = primes(nums[i])
+        if len(prime) % 2 == 0:
+            Ben += 1
+        else:
+            Maria += 1
     
-    # Precompute the cumulative count of prime numbers up to each number
-    prime_count = [0] * (max_n + 1)
+    # Determine the overall winner based on the count of wins
+    if Maria > Ben:
+        return 'Maria'
+    elif Ben > Maria:
+        return 'Ben'
+    
+    return None
     for i in range(1, max_n + 1):
         prime_count[i] = prime_count[i - 1] + (1 if prime_sieve[i] else 0)
     
