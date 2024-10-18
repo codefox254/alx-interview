@@ -9,7 +9,8 @@ def primes(n):
     Return a list of prime numbers between 1 and n inclusive.
 
     Args:
-        n (int): The upper boundary of the range, where the lower boundary is always 1.
+        n (int): The upper boundary of the range, where the lower boundary
+                 is always 1.
 
     Returns:
         list: A list of prime numbers within the range from 1 to n.
@@ -35,7 +36,8 @@ def isWinner(x, nums):
         nums (list of int): Upper limits for each round of the game.
 
     Returns:
-        str: The name of the winner ("Maria" or "Ben"). If no winner is determined, returns None.
+        str: The name of the winner ("Maria" or "Ben"). If no winner is
+             determined, returns None.
     """
     if x is None or nums is None or x == 0 or nums == []:
         return None
