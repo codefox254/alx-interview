@@ -11,17 +11,19 @@ def makeChange(coins, total):
     Returns:
         int: fewest number of coins needed to meet total, or -1 if not possible
     """
-    if total <= 0:
+   if total <= 0:
         return 0
-
-    # Initialize DP array to store minimum coins required for each amount
-    dp = [float('inf')] * (total + 1)
-    dp[0] = 0  # 0 coins are needed to make a total of 0
-
-    # Iterate over each coin
-    for coin in coins:
-        for x in range(coin, total + 1):
-            dp[x] = min(dp[x], dp[x - coin] + 1)
-
-    # If dp[total] is still infinity, return -1 because total can't be reached
-    return dp[total] if dp[total] != float('inf') else -1
+    rem = total
+    coins_count = 0
+    coin_idx = 0
+    sorted_coins = sorted(coins, reverse=True)
+    n = len(coins)
+    while rem > 0:
+        if coin_idx >= n:
+            return -1
+        if rem - sorted_coins[coin_idx] >= 0:
+            rem -= sorted_coins[coin_idx]
+            coins_count += 1
+        else:
+            coin_idx += 1
+    return coins_count
