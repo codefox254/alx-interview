@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """0-pascal_triangle: Generates Pascal's triangle up to n rows."""
 
-
 def pascal_triangle(n):
     """Returns a list of lists of integers representing Pascal's triangle of n."""
     
